@@ -18,32 +18,27 @@
 </head>
 <body>
 	<div class="container">
-		<h1>Registro de Concurso</h1>
-		<form id="formConcurso" method="post" novalidate >
+		<h1>Registro de Cliente</h1>
+		<form id="formCliente" method="post" novalidate >
 			<div class="row" style="margin-top: 2%;">
-				<div class="col-3">
-					<label for="nombre">Nombre</label> 
+				<div class="col-8">
+					<label for="registro">Nombre</label> 
 					<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre" maxlength="30" required>
-					<div class="invalid-feedback">Ingrese el nombre (4 a 30 caracteres)</div>
+					<div class="invalid-feedback">Ingrese el Nombre</div>
 				</div>
-				<div class="col-3">
-					<label for="fecNac">Fecha de Inicio</label> 
-					<input type="date" class="form-control" id="fecIni" name="fecIni" required>
-					<div class="invalid-feedback">Ingrese la Fecha de Inicio</div>
+				<div class="col-4">
+					<label for="titulo">DNI</label> 
+					<input type="text" class="form-control" id="dni" name="dni" placeholder="Ingrese el DNI" maxlength="8" required>
+					<div class="invalid-feedback">Ingrese el DNI</div>
 				</div>
-				<div class="col-3">
-					<label for="fecNac">Fecha de Fin</label> 
-					<input type="date" class="form-control" id="fecFin" name="fecFin" required>
-					<div class="invalid-feedback">Ingrese la Fecha de Fin</div>
-				</div>
-				<div class="col-3">
-					<label for="dni">Estado</label> 
-					<select class="form-control" id="estado" name="estado" required>
-                        <option value="">Seleccione el estado</option>
-                        <option value="Activo">Activo</option>
-                        <option value="Inactivo">Inactivo</option>
-                     </select>
-					<div class="invalid-feedback">Ingrese el estado</div>
+			</div>
+			<div class="row" style="margin-top: 2%;">	
+				<div class="col-6">
+					<label for="pais">Categoría</label> 
+					<select class="form-control" id="categoria" name="categoria" required>
+                        <option value="">Seleccione una categoría</option>
+                    </select>    
+					<div class="invalid-feedback">Ingrese la categoría</div>
 				</div>
 			</div>
 			<div class="row justify-content-center" style="margin-top: 2%">
@@ -53,12 +48,29 @@
 	</div>
 
 <script type="text/javascript">
+  $(document).ready(function () {
+				$.ajax({
+				url: 'cargaCategoriaAlias', // URL del servlet para obtener categorías
+				type: 'GET',
+				success: function (data) {
+					console.log('Categorías cargadas:', data);
+					var comboBox = $('#categoria');
+					data.forEach(function (obj) {
+						comboBox.append('<option value="' + obj.idCategoria + '">' + obj.nombre + '</option>');
+					});
+				},
+				error: function (xhr, status, error) {
+					console.error('Error al cargar categorías:', error);
+				}
+			});
+	});
+
 	$("#btnRegistrar").click(function(e) {
 		console.log("click en registrar");		
 		e.preventDefault(); //Evita que el formulario se envíe automáticamente
 
 		
-		let form = $('#formConcurso')[0];
+		let form = $('#formCliente')[0];
         if (form.checkValidity() === false) {
             $(form).addClass('was-validated');
             return;
@@ -66,20 +78,20 @@
 
      
         $.ajax({
-			url: 'registraConcursoAlias',
+			url: 'registraClienteAlias',
 			type: 'POST',
 			data: $(form).serialize(),
 			success: function (response) {
 				
 				console.log('response >>> '+ response);
 				//limpiar el formulario
-				$('#formConcurso')[0].reset();
+				$('#formCliente')[0].reset();
 				
 				//limpiar las validaciones
-				$('#formConcurso').removeClass('was-validated');
+				$('#formCliente').removeClass('was-validated');
 				
 				//enviar un mensaje de éxito al usuario en forma de div que dure 3 segundos
-				$('#formConcurso').prepend('<div class="alert alert-success" role="alert">'+ response.mensajeSalida +'</div>');
+				$('#formCliente').prepend('<div class="alert alert-success" role="alert">'+ response.mensajeSalida +'</div>');
 				setTimeout(function () {
 					$('.alert').remove();
 				}, 3000);
@@ -93,4 +105,4 @@
 </script>
 
 </body>
-</html>ml>
+</html>

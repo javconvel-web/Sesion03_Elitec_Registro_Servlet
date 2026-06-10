@@ -32,7 +32,7 @@ public class RegistraConcursoServlet extends HttpServlet {
 		concurso.setNombre(nombre);
 		concurso.setFechaInicio(java.time.LocalDate.parse(fechaInicio));
 		concurso.setFechaFin(java.time.LocalDate.parse(fechaFin));
-		concurso.setEstado(Integer.parseInt(estado));
+		concurso.setEstado(estado);
 		
 
 		// 3 Crear un objeto CocnursoModel
